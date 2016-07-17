@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends AppCompatActivity implements
@@ -76,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements
         if (location != null) {
             dumpLocation(location);
         }
+
+        // 高い精度で1〜5秒間隔で更新を要求する
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                locationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        dumpLocation(location);
     }
 
     /**
